@@ -19,6 +19,7 @@ public class BulletIteractions : MonoBehaviour
 
     private void Start()
     {
+        bullets = new ArrayList();
         bulletInstance.OnBulletInstantiation += AddBullet;
     }
 
@@ -43,8 +44,7 @@ public class BulletIteractions : MonoBehaviour
             if (raycastHit.transform.TryGetComponent(out Health golemHealthScript))
             {
                 OnGolemHit?.Invoke(raycastHit.transform);
-                Destroy(bullet, 1f);
-                bullet = null;
+                DestroyBullet(bullet);
             }
         }
     }
@@ -56,10 +56,15 @@ public class BulletIteractions : MonoBehaviour
         {
             if(hitInfo.collider.tag == "Ground")
             {
-                bullets.Remove(bullet);
-                Destroy(bullet);
+                DestroyBullet(bullet, 1f);
             }
         }
+    }
+
+    private void DestroyBullet(GameObject bullet, float delay = 0)
+    {
+        bullets.Remove(bullet);
+        Destroy(bullet, delay);
     }
 
     private void AddBullet(GameObject instance)
